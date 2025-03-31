@@ -5,10 +5,11 @@ import curses
 from curses import wrapper
 import time
 import os
+import dotenv
 
 
 class ChatClient:
-    def __init__(self, server_ip, server_port=27101, encryption_size=4096):
+    def __init__(self, server_ip, server_port=27101, encryption_size=1024):
         self.server_ip = server_ip
         self.server_port = server_port
         self.encryption_size = encryption_size
@@ -24,6 +25,7 @@ class ChatClient:
         self.connected = False
         self.user_count = 1  # Default to 1 (self)
         self.key_folder = "keys"  # Folder to store keys
+        self.env_file = ".env"  # Environment file to store password
         
     def load_or_generate_keys(self, username):
         """Load RSA keys from files or generate new ones if files don't exist"""
@@ -70,6 +72,36 @@ class ChatClient:
             print(f"Error generating keys: {str(e)}")
             return False
 
+    def load_or_set_password(self, server_ip):
+        """Load the password from .env file or prompt the user to set one"""
+        # Create .env file if it doesn't exist
+        if not os.path.exists(self.env_file):
+            with open(self.env_file, 'w') as f:
+                f.write(f"# Chat client environment file\n")
+            print(f"Created {self.env_file} file.")
+        
+        # Load environment variables
+        dotenv.load_dotenv(self.env_file)
+        
+        # Check if we have a password for this server
+        password_key = f"CHAT_PASSWORD_{server_ip.replace('.', '_')}"
+        password = os.environ.get(password_key)
+        
+        if not password:
+            # Prompt for password
+            password = input(f"Enter password for server {server_ip}: ")
+            
+            # Save the password to .env file
+            with open(self.env_file, 'a') as f:
+                f.write(f"\n{password_key}={password}")
+            
+            # Reload environment variables
+            dotenv.load_dotenv(self.env_file)
+            
+            print(f"Password saved for server {server_ip}.")
+        
+        return password
+
     def connect(self, username):
         """Connect to the chat server"""
         self.username = username
@@ -78,6 +110,9 @@ class ChatClient:
             # Load or generate keys
             if not self.load_or_generate_keys(username):
                 return False
+                
+            # Load or set password
+            password = self.load_or_set_password(self.server_ip)
 
             # Connect to server
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -88,6 +123,25 @@ class ChatClient:
                 self.client_socket.recv(self.encryption_size * 2)
             )
             self.client_socket.send(self.public_key.save_pkcs1("PEM"))
+            
+            # Send password
+            encrypted_password = rsa.encrypt(password.encode(), self.server_public_key)
+            self.client_socket.send(encrypted_password)
+            
+            # Wait for authentication response
+            encrypted_auth_response = self.client_socket.recv(self.encryption_size)
+            auth_response = rsa.decrypt(encrypted_auth_response, self.private_key).decode()
+            
+            # Check if authentication was successful
+            if auth_response.startswith("AUTHFAILED:"):
+                error_message = auth_response.split(":", 1)[1]
+                print(f"Authentication failed: {error_message}")
+                
+                # Remove password from .env if it's incorrect
+                password_key = f"CHAT_PASSWORD_{self.server_ip.replace('.', '_')}"
+                self.update_env_file(password_key, None)
+                
+                return False
 
             # Send username
             encrypted_username = rsa.encrypt(username.encode(), self.server_public_key)
@@ -102,6 +156,26 @@ class ChatClient:
             if self.client_socket:
                 self.client_socket.close()
             return False
+    
+    def update_env_file(self, key, value):
+        """Update a value in the .env file"""
+        # Read existing env file
+        if os.path.exists(self.env_file):
+            with open(self.env_file, 'r') as f:
+                lines = f.readlines()
+        else:
+            lines = []
+        
+        # Remove the key if it exists
+        lines = [line for line in lines if not line.strip().startswith(f"{key}=")]
+        
+        # Add the new value if provided
+        if value is not None:
+            lines.append(f"{key}={value}\n")
+        
+        # Write back to file
+        with open(self.env_file, 'w') as f:
+            f.writelines(lines)
 
     def disconnect(self):
         """Disconnect from the server"""
@@ -288,6 +362,16 @@ class ChatClient:
 
 
 if __name__ == "__main__":
+    # Check for required packages
+    try:
+        import dotenv
+    except ImportError:
+        print("The 'python-dotenv' package is required. Installing...")
+        import subprocess
+        subprocess.check_call(["pip", "install", "python-dotenv"])
+        import dotenv
+        print("Package installed successfully.")
+
     # Get server connection details
     server_ip = str(input("Enter server IP address: ") or "127.0.0.1")
     try:

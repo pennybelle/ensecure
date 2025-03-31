@@ -1,6 +1,8 @@
 .vscode
 .venv
+.env
 
 *.code-workspace
 
 keys/*
+server_password.txt

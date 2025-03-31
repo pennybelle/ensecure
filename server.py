@@ -1,6 +1,8 @@
 import socket
 import threading
 import rsa
+import os
+import hashlib
 
 
 class ChatServer:
@@ -9,11 +11,48 @@ class ChatServer:
         self.port = port
         self.encryption_size = encryption_size
         self.server_socket = None
-        self.clients = []  # List of (client_socket, client_address, public_key) tuples
+        self.clients = []  # List of (client_socket, client_address, public_key, username) tuples
         self.public_key = None
         self.private_key = None
+        
+        # Password configuration
+        self.password = None
+        self.password_hash = None
+        self.password_file = "server_password.txt"
+        
+    def setup_password(self):
+        """Set up or load the server password"""
+        if os.path.exists(self.password_file):
+            # Load existing password hash
+            with open(self.password_file, 'r') as f:
+                self.password_hash = f.read().strip()
+            print("Loaded existing password hash.")
+        else:
+            # Create a new password
+            while True:
+                password = input("Set server password (min 8 characters): ")
+                if len(password) >= 8:
+                    break
+                print("Password too short. Please use at least 8 characters.")
+            
+            # Hash the password
+            self.password_hash = hashlib.sha256(password.encode()).hexdigest()
+            
+            # Save the password hash
+            with open(self.password_file, 'w') as f:
+                f.write(self.password_hash)
+            
+            print("New password set and saved.")
+
+    def check_password(self, password):
+        """Check if the provided password matches the stored hash"""
+        provided_hash = hashlib.sha256(password.encode()).hexdigest()
+        return provided_hash == self.password_hash
 
     def start(self):
+        # Set up password
+        self.setup_password()
+        
         # Generate keys
         print("Generating RSA keys...")
         self.public_key, self.private_key = rsa.newkeys(self.encryption_size)
@@ -51,6 +90,25 @@ class ChatServer:
             client_socket.send(self.public_key.save_pkcs1("PEM"))
             client_public_key_data = client_socket.recv(self.encryption_size * 2)
             client_public_key = rsa.PublicKey.load_pkcs1(client_public_key_data)
+
+            # Get client password
+            encrypted_password = client_socket.recv(self.encryption_size)
+            password = rsa.decrypt(encrypted_password, self.private_key).decode()
+            
+            # Check password
+            if not self.check_password(password):
+                print(f"Authentication failed for client {client_address}")
+                # Send authentication failed message
+                auth_failed_msg = "AUTHFAILED:Incorrect password."
+                encrypted_auth_failed = rsa.encrypt(auth_failed_msg.encode(), client_public_key)
+                client_socket.send(encrypted_auth_failed)
+                client_socket.close()
+                return
+                
+            # Send authentication success message
+            auth_success_msg = "AUTHSUCCESS:Authentication successful."
+            encrypted_auth_success = rsa.encrypt(auth_success_msg.encode(), client_public_key)
+            client_socket.send(encrypted_auth_success)
 
             # Get client username
             encrypted_username = client_socket.recv(self.encryption_size)
