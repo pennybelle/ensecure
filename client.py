@@ -9,7 +9,7 @@ import dotenv
 
 
 class ChatClient:
-    def __init__(self, server_ip, server_port=27101, encryption_size=1024):
+    def __init__(self, server_ip, server_port=27101, encryption_size=4096):
         self.server_ip = server_ip
         self.server_port = server_port
         self.encryption_size = encryption_size
@@ -56,7 +56,7 @@ class ChatClient:
         
         # Generate new keys if files don't exist or loading failed
         try:
-            print("Generating new RSA keys (can take a min)...")
+            print("Generating new RSA keys (can take a bit)...")
             self.public_key, self.private_key = rsa.newkeys(self.encryption_size)
             
             # Save the keys to files
@@ -77,7 +77,7 @@ class ChatClient:
         # Create .env file if it doesn't exist
         if not os.path.exists(self.env_file):
             with open(self.env_file, 'w') as f:
-                f.write(f"# Chat client environment file\n")
+                f.write("# Chat client environment file\n")
             print(f"Created {self.env_file} file.")
         
         # Load environment variables
@@ -264,7 +264,7 @@ class ChatClient:
         start_index = max(0, len(self.message_history) - max_messages)
 
         # Draw a header with user count
-        header = f" Chat Room: {self.username} on {self.server_ip}:{self.server_port} | Users Online: {self.user_count} "
+        header = f" ~ the void ~ | {self.username} on {self.server_ip}:{self.server_port} | users: {self.user_count} "
         self.stdscr.addstr(0, max(0, (width - len(header)) // 2), header[: width - 1])
         self.stdscr.addstr(1, 0, "=" * width)
 
