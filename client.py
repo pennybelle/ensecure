@@ -7,7 +7,7 @@ import time
 
 
 class ChatClient:
-    def __init__(self, server_ip, server_port=9987, encryption_size=2048):
+    def __init__(self, server_ip, server_port=9999, encryption_size=4096):
         self.server_ip = server_ip
         self.server_port = server_port
         self.encryption_size = encryption_size
@@ -165,8 +165,8 @@ class ChatClient:
 
             self.stdscr.addstr(i + 2, 0, message_text)  # +2 for header and divider
 
-        # Draw a divider above input line
-        self.stdscr.addstr(height - 2, 0, "-" * width)
+        # # Draw a divider above input line
+        # self.stdscr.addstr(height - 2, 0, "-" * width)
 
         # Draw input line
         input_line = f"> {self.input_str}"
@@ -245,11 +245,11 @@ class ChatClient:
 
 if __name__ == "__main__":
     # Get server connection details
-    server_ip = input("Enter server IP address: ")
+    server_ip = str(input("Enter server IP address: ") or "127.0.0.1")
     try:
-        server_port = int(input("Enter server port (press Enter for 9987): ") or 9987)
+        server_port = int(input("Enter server port (press Enter for 9999): ") or 9999)
     except ValueError:
-        server_port = 9987
+        server_port = 9999
 
     username = input("Enter your username: ")
     if not username:
