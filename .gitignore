@@ -2,3 +2,5 @@
 .venv
 
 *.code-workspace
+
+keys/*

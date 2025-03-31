@@ -4,6 +4,7 @@ import rsa
 import curses
 from curses import wrapper
 import time
+import os
 
 
 class ChatClient:
@@ -22,15 +23,61 @@ class ChatClient:
         self.send_message_flag = False
         self.connected = False
         self.user_count = 1  # Default to 1 (self)
+        self.key_folder = "keys"  # Folder to store keys
+        
+    def load_or_generate_keys(self, username):
+        """Load RSA keys from files or generate new ones if files don't exist"""
+        # Create keys directory if it doesn't exist
+        if not os.path.exists(self.key_folder):
+            os.makedirs(self.key_folder)
+            
+        private_key_path = os.path.join(self.key_folder, f"{username}_private.pem")
+        public_key_path = os.path.join(self.key_folder, f"{username}_public.pem")
+        
+        # Check if key files exist
+        if os.path.exists(private_key_path) and os.path.exists(public_key_path):
+            try:
+                # Load existing keys
+                print("Loading existing RSA keys...")
+                with open(private_key_path, 'rb') as f:
+                    private_key_data = f.read()
+                    self.private_key = rsa.PrivateKey.load_pkcs1(private_key_data)
+                
+                with open(public_key_path, 'rb') as f:
+                    public_key_data = f.read()
+                    self.public_key = rsa.PublicKey.load_pkcs1(public_key_data)
+                
+                print("Keys loaded successfully.")
+                return True
+            except Exception as e:
+                print(f"Error loading keys: {str(e)}. Generating new keys...")
+        
+        # Generate new keys if files don't exist or loading failed
+        try:
+            print("Generating new RSA keys (can take a min)...")
+            self.public_key, self.private_key = rsa.newkeys(self.encryption_size)
+            
+            # Save the keys to files
+            with open(private_key_path, 'wb') as f:
+                f.write(self.private_key.save_pkcs1('PEM'))
+            
+            with open(public_key_path, 'wb') as f:
+                f.write(self.public_key.save_pkcs1('PEM'))
+            
+            print("New keys generated and saved.")
+            return True
+        except Exception as e:
+            print(f"Error generating keys: {str(e)}")
+            return False
 
     def connect(self, username):
         """Connect to the chat server"""
         self.username = username
 
         try:
-            # Generate keys
-            print("Generating RSA keys (can take a min)...")
-            self.public_key, self.private_key = rsa.newkeys(self.encryption_size)
+            # Load or generate keys
+            if not self.load_or_generate_keys(username):
+                return False
 
             # Connect to server
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -164,9 +211,6 @@ class ChatClient:
                 message_text = message_text[: width - 5] + "..."
 
             self.stdscr.addstr(i + 2, 0, message_text)  # +2 for header and divider
-
-        # # Draw a divider above input line
-        # self.stdscr.addstr(height - 2, 0, "-" * width)
 
         # Draw input line
         input_line = f"> {self.input_str}"

@@ -4,7 +4,7 @@ import rsa
 
 
 class ChatServer:
-    def __init__(self, host="0.0.0.0", port=27101, encryption_size=2048):
+    def __init__(self, host="0.0.0.0", port=27101, encryption_size=4096):
         self.host = host
         self.port = port
         self.encryption_size = encryption_size
