@@ -7,7 +7,7 @@ import time
 
 
 class ChatClient:
-    def __init__(self, server_ip, server_port=9999, encryption_size=4096):
+    def __init__(self, server_ip, server_port=27101, encryption_size=4096):
         self.server_ip = server_ip
         self.server_port = server_port
         self.encryption_size = encryption_size
@@ -247,9 +247,9 @@ if __name__ == "__main__":
     # Get server connection details
     server_ip = str(input("Enter server IP address: ") or "127.0.0.1")
     try:
-        server_port = int(input("Enter server port (press Enter for 9999): ") or 9999)
+        server_port = int(input("Enter server port (press Enter for 27101): ") or 27101)
     except ValueError:
-        server_port = 9999
+        server_port = 27101
 
     username = input("Enter your username: ")
     if not username:

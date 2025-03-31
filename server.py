@@ -4,7 +4,7 @@ import rsa
 
 
 class ChatServer:
-    def __init__(self, host="0.0.0.0", port=9999, encryption_size=2048):
+    def __init__(self, host="0.0.0.0", port=27101, encryption_size=2048):
         self.host = host
         self.port = port
         self.encryption_size = encryption_size
@@ -162,18 +162,18 @@ class ChatServer:
 
 if __name__ == "__main__":
     # Get server IP (default to local)
-    # hostname = socket.gethostname()
-    # local_ip = socket.gethostbyname(hostname)
-    local_ip = "127.0.0.1"
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    # local_ip = "127.0.0.1"
 
     print(f"Your local IP address is: {local_ip}")
 
     # Allow specifying different IP and port
     server_ip = input(f"Enter server IP (press Enter for {local_ip}): ") or local_ip
     try:
-        server_port = int(input("Enter server port (press Enter for 9999): ") or 9999)
+        server_port = int(input("Enter server port (press Enter for 27101): ") or 27101)
     except ValueError:
-        server_port = 9999
+        server_port = 27101
 
     server = ChatServer(server_ip, server_port)
     server.start()
