@@ -29,7 +29,7 @@ class ChatClient:
 
         try:
             # Generate keys
-            print("Generating RSA keys...")
+            print("Generating RSA keys (can take a min)...")
             self.public_key, self.private_key = rsa.newkeys(self.encryption_size)
 
             # Connect to server
