@@ -1,0 +1,22 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install rsa python-dotenv
+
+# Copy client script
+COPY client.py .
+
+# Create directories for keys and environment variables
+RUN mkdir -p /app/keys
+
+# Create volumes for persistent key storage
+VOLUME /app/keys
+VOLUME /app/env
+
+# Set TERM environment variable for curses
+ENV TERM=xterm-256color
+
+# Run the client
+CMD ["python", "/app/client.py"]

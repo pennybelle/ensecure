@@ -2,10 +2,11 @@ import socket
 import threading
 import rsa
 import curses
-from curses import wrapper
 import time
 import os
 import dotenv
+
+from curses import wrapper
 
 
 class ChatClient:
@@ -208,6 +209,8 @@ class ChatClient:
                     self.message_history.append((sender, content))
                 else:
                     self.message_history.append(("system", message))
+
+                print("\a")
 
                 self.update_screen()
 

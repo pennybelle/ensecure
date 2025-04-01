@@ -219,12 +219,15 @@ class ChatServer:
 
 
 if __name__ == "__main__":
+    boop = input("Press enter to continue :3")
+    
     # Get server IP (default to local)
     hostname = socket.gethostname()
     local_ip = socket.gethostbyname(hostname)
     # local_ip = "127.0.0.1"
 
     print(f"Your local IP address is: {local_ip}")
+
 
     # Allow specifying different IP and port
     server_ip = input(f"Enter server IP (press Enter for {local_ip}): ") or local_ip

@@ -1,0 +1,39 @@
+# version: '3'
+
+services:
+  ensecure-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: ensecure-server
+    ports:
+      - "27101:27101"
+    volumes:
+      - ./server-data:/app/data
+    networks:
+      - chat-network
+    environment:
+      - SERVER_IP=0.0.0.0  # Listen on all interfaces
+    # Using interactive mode for the client
+    stdin_open: true
+    tty: true
+
+  ensecure-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: ensecure-client
+    volumes:
+      - ./client-keys:/app/keys
+      - ./client-env:/app/env
+    networks:
+      - chat-network
+    working_dir: /app/env    # Set the working directory to /app/env
+    command: python /app/client.py
+    # Using interactive mode for the client
+    stdin_open: true
+    tty: true
+
+networks:
+  chat-network:
+    driver: bridge
