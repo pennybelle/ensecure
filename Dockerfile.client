@@ -3,7 +3,8 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Install dependencies
-RUN pip install rsa python-dotenv python-getpass
+COPY requirements_client.txt .
+RUN pip install -r requirements_client.txt
 
 # Copy client script
 COPY client.py .
