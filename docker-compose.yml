@@ -1,7 +1,7 @@
 # version: '3'
 
 services:
-  ensecure-server:
+  server:
     build:
       context: .
       dockerfile: Dockerfile.server
@@ -18,7 +18,7 @@ services:
     stdin_open: true
     tty: true
 
-  ensecure-client:
+  client:
     build:
       context: .
       dockerfile: Dockerfile.client
