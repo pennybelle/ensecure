@@ -4,6 +4,8 @@ import rsa
 import os
 import hashlib
 
+from getpass import getpass
+
 
 class ChatServer:
     def __init__(self, host="0.0.0.0", port=27101, encryption_size=4096):
@@ -30,7 +32,7 @@ class ChatServer:
         else:
             # Create a new password
             while True:
-                password = input("Set server password (min 8 characters): ")
+                password = getpass("Set server password (min 8 characters): ")
                 if len(password) >= 8:
                     break
                 print("Password too short. Please use at least 8 characters.")

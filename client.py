@@ -7,6 +7,7 @@ import os
 import dotenv
 
 from curses import wrapper
+from getpass import getpass
 
 
 class ChatClient:
@@ -90,7 +91,7 @@ class ChatClient:
         
         if not password:
             # Prompt for password
-            password = input(f"Enter password for server {server_ip}: ")
+            password = getpass(f"Enter password for server {server_ip}: ")
             
             # Save the password to .env file
             with open(self.env_file, 'a') as f:
