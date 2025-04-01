@@ -210,7 +210,7 @@ class ChatClient:
                 else:
                     self.message_history.append(("system", message))
 
-                print("\a")
+                # print("\a") # SO ANNOYING
 
                 self.update_screen()
 
