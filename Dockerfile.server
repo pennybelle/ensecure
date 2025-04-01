@@ -3,8 +3,8 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Install dependencies
-COPY requirements_server.txt .
-RUN pip install -r requirements_server.txt
+# COPY requirements_server.txt .
+RUN pip install rsa
 
 # Copy server script
 COPY server.py .
