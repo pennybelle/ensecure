@@ -22,7 +22,7 @@ apk add docker docker-compose
 apt install docker docker-compose
 ```
 
-Make sure to start the daemon before you run and of the Use commands
+Make sure to start the daemon before you try using the application!
 ```sh
 sudo systemctl start docker
 ```
