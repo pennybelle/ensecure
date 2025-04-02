@@ -4,6 +4,11 @@
 
 *.code-workspace
 
-keys/*
-legacy/*
+server-data/*
+client-env/*
+client-env/keys/*
+client-keys/*
+
+keys/
+legacy/
 server_password.txt
