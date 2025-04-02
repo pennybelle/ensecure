@@ -1,6 +1,33 @@
 Encrypted chat room!
 ![~ the void ~](/media/the_void.png?raw=true "ensecure client")
 
+# Prerequisites
+You need Docker (and docker-compose) to run this application.
+## Linux
+Download with your favorite package manager
+#### Arch
+```sh
+pacman -S docker docker-compose
+```
+#### Debian
+```sh
+dpkg -i docker docker-compose
+```
+#### Alpine
+```sh
+apk add docker docker-compose
+```
+
+Make sure to start the daemon before you run and of the Use commands
+```sh
+sudo systemctl start docker
+```
+
+## Windows
+Just download the Docker Desktop app from their [website](https://www.docker.com/products/docker-desktop/).
+Launch the app to start the engine, wait for the app to report the engine has started, and then you're good!
+
+
 # Install
 ```sh
 git clone https://github.com/pennybelle/ensecure.git
