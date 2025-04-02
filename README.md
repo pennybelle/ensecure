@@ -8,6 +8,11 @@ cd ensecure
 
 # How to use
 First build the thing (only needs to be done on install and when updating)
+#### Server
+```sh
+docker-compose build server
+```
+#### Client
 ```sh
 docker-compose build client
 ```
