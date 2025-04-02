@@ -13,7 +13,7 @@ docker-compose build client
 ```
 Then run the thing (needs to be done every time unfortunately)
 ## Server
-Start server
+### Start server
 ```sh
 docker-compose up -d server
 docker-compose attach server
@@ -22,12 +22,12 @@ docker-compose attach server
 - Default ip is usually fine, same with port unless you are running multiple rooms/servers
 - Set server password (only needs to be done on server init)
 - When the console says "Waiting for connections..." you can detach from the container with CTRL+P then CTRL+Q
-Stop server
+### Stop server
 ```sh
 docker-compose down server
 ```
 ## Client
-Start client
+### Start client
 ```sh
 docker-compose run --rm client
 ```
@@ -37,9 +37,9 @@ docker-compose run --rm client
 - The client will generate 4096 RSA keys (only done once, reuses saved keys from then on)
 - Then enter the password (only has to be done first time, saved to a .env)
 - You will then be connected to the room!
-Stop client
+### Stop client
 - CTRL+C to leave the room (docker keeps it running so make sure to do this when you are done!)
-If container is left running (say if you crashed or detached), stop with
+- If container is left running (say if you crashed or detached), stop with
 ```sh
 docker-compose down client
 ```
