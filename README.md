@@ -2,24 +2,24 @@ Encrypted chat room!
 ![~ the void ~](/media/the_void.png?raw=true "ensecure client")
 
 # Prerequisites
-You need Docker (and docker-compose) to run this application.
+You need Git to install and Docker (and docker-compose) to run this application.
 ## Linux
 Download with your favorite package manager
 #### Arch
 ```sh
-pacman -S docker docker-compose
+pacman -S git docker docker-compose
 ```
 #### Debian
 ```sh
-dpkg -i docker docker-compose
+dpkg -i git docker docker-compose
 ```
 #### Alpine
 ```sh
-apk add docker docker-compose
+apk add git docker docker-compose
 ```
 #### Ubuntu and friends
 ```sh
-apt install docker docker-compose
+apt install git docker docker-compose
 ```
 
 Make sure to start the daemon before you try using the application!
@@ -28,6 +28,10 @@ sudo systemctl start docker
 ```
 
 ## Windows
+#### GitHub Desktop
+Just [download the GitHub Desktop app from their website](https://central.github.com/deployments/desktop/desktop/latest/win32).
+Launch the app to install git on powershell. For the install process, use PowerShell to run the commands.
+#### Docker Desktop
 Just [download the Docker Desktop app from their website](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module).
 Launch the app to start the engine, wait for the app to report the engine has started, and then you're good!
 
