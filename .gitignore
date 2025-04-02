@@ -4,10 +4,9 @@
 
 *.code-workspace
 
-server-data/*
-client-env/*
-client-env/keys/*
-client-keys/*
+server-data/
+client-env/
+client-keys/
 
 keys/
 legacy/

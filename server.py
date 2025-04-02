@@ -221,6 +221,9 @@ class ChatServer:
 
 
 if __name__ == "__main__":
+    if os.path.isdir("server-data") is not True:
+        os.mkdir("server-data")
+
     boop = input("Press enter to continue :3")
     
     # Get server IP (default to local)

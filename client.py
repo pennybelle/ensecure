@@ -366,6 +366,11 @@ class ChatClient:
 
 
 if __name__ == "__main__":
+    if os.path.isdir("client-env") is not True:
+        os.mkdir("client-env")
+    if os.path.isdir("client-keys") is not True:
+        os.mkdir("client-keys")
+
     # Check for required packages
     try:
         import dotenv
