@@ -18,6 +18,7 @@ docker-compose build client
 ```
 
 # Use Server
+Then use the thing (has to be done every time unfortunately)
 ### Start server
 ```sh
 docker-compose up -d server
