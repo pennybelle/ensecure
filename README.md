@@ -1,4 +1,5 @@
 Encrypted chat room!
+![~ the void ~](/media/the_void.png?raw=true "ensecure client")
 
 # Install
 ```sh
@@ -49,5 +50,3 @@ docker-compose run --rm client
 ```sh
 docker-compose down client
 ```
-
-![~ the void ~](/media/the_void.png?raw=true "ensecure client")
