@@ -24,7 +24,7 @@ sudo systemctl start docker
 ```
 
 ## Windows
-Just download the Docker Desktop app from their [website](https://www.docker.com/products/docker-desktop/).
+Just [download the Docker Desktop app from their website](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module).
 Launch the app to start the engine, wait for the app to report the engine has started, and then you're good!
 
 
