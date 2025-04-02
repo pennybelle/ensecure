@@ -53,22 +53,8 @@ docker-compose build server
 docker-compose build client
 ```
 
-# Use Server
+# Use (Client)
 Then use the thing (has to be done every time unfortunately)
-### Start server
-```sh
-docker-compose up -d server
-docker-compose attach server
-```
-- Press enter to init inputs
-- Default ip is usually fine, same with port unless you are running multiple rooms/servers
-- Set server password (only needs to be done on server init)
-- When the console says "Waiting for connections..." you can detach from the container with CTRL+P then CTRL+Q
-### Stop server
-```sh
-docker-compose down server
-```
-# Use Client
 ### Start client
 ```sh
 docker-compose run --rm client
@@ -84,4 +70,19 @@ docker-compose run --rm client
 - If container is left running (say if you crashed or detached), stop with
 ```sh
 docker-compose down client
+```
+# Use (Server)
+If you want to run a room that people can connect to, use this! Make sure to port forward whatever port you use for your room if you want the room to be available over the web. Data transmission is encrypted with 4096 rsa encryption. If someone is connecting from outside your LAN, make sure they use [your public IPv4 address](https://whatismyipaddress.com/)!
+### Start server
+```sh
+docker-compose up -d server
+docker-compose attach server
+```
+- Press enter to init inputs
+- Default ip is usually fine, same with port unless you are running multiple rooms/servers
+- Set server password (only needs to be done on server init)
+- When the console says "Waiting for connections..." you can detach from the container with CTRL+P then CTRL+Q
+### Stop server
+```sh
+docker-compose down server
 ```
