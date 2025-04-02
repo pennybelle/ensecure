@@ -1,12 +1,12 @@
 Encrypted chat room!
 
-# Installation
+# Install
 ```sh
 git clone https://github.com/pennybelle/ensecure.git
 cd ensecure
 ```
 
-# How to use
+# Build
 First build the thing (only needs to be done on install and when updating)
 #### Server
 ```sh
@@ -16,7 +16,8 @@ docker-compose build server
 ```sh
 docker-compose build client
 ```
-Then run the thing (needs to be done every time unfortunately)
+
+# Use
 ## Server
 ### Start server
 ```sh
