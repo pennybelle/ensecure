@@ -17,6 +17,10 @@ dpkg -i docker docker-compose
 ```sh
 apk add docker docker-compose
 ```
+#### Ubuntu and friends
+```sh
+apt install docker docker-compose
+```
 
 Make sure to start the daemon before you run and of the Use commands
 ```sh
